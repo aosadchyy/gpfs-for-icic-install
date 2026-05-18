@@ -19,13 +19,26 @@ This guide provides instructions for installing IBM Spectrum Scale (formerly GPF
 
 ## Overview
 
-IBM Spectrum Scale must be mounted on both Management (MGMT) and Compute (COMP) nodes to ensure proper functionality, particularly for Boot from Volume (BFV) operations with Glance images.
+IBM Spectrum Scale (GPFS) must be installed and mounted on both the Management (MGMT) node and all Compute (COMP) nodes of IBM Cloud Infrastructure Center (ICIC) to ensure proper functionality, particularly for Boot from Volume (BFV) operations with Glance images.
+
+### Storage Architecture
+
+GPFS relies on SAN (Storage Area Network) for sharing storage across all nodes. You must:
+
+1. **Create a single shared volume** on your SAN storage system (e.g., IBM FlashSystem 9500 or IBM DS8000)
+2. **Mount the same volume** to the Management node and all Compute nodes
+3. The shared SAN volume enables GPFS to provide a unified filesystem across all nodes
+
+### Installation Requirements
+- **Management Node**: GPFS must be installed and configured
+- **All Compute Nodes**: GPFS must be installed and configured on every compute node
+- **Shared SAN Volume**: A single volume must be created on SAN and mounted to all nodes
 
 ### Mount Points
 - **Management Node**: `/var/lib/glance/images`
 - **Compute Node**: `/gpfs/icic_gpfs/icic/images`
 
-> **Note**: If GPFS is not mounted on both nodes, Boot from Volume operations will fail. Images must be replicated from MGMT to COMP nodes.
+> **Important**: GPFS installation is required on the Management node and all Compute nodes. The same SAN volume must be mounted to all nodes for GPFS to function properly. If GPFS is not mounted on both node types, Boot from Volume operations will fail. Images must be replicated from MGMT to COMP nodes.
 
 ## Prerequisites
 
@@ -33,6 +46,9 @@ IBM Spectrum Scale must be mounted on both Management (MGMT) and Compute (COMP) 
 - IBM Spectrum Scale installation media (e.g. 5.1.9.2 or later)
 - Root access to all nodes
 - Network connectivity between nodes
+- **SAN Storage**: A single shared volume created on SAN storage (e.g., IBM FlashSystem 9500 or IBM DS8000) and mounted to all nodes
+
+
 
 ## Important Configuration Notes
 
